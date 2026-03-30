@@ -37,8 +37,14 @@ a:hover { color: #06b6d4; border-bottom-color: #06b6d4; }
 .q-options { list-style: none; padding: 0; margin-bottom: 16px; }
 .q-options li { padding: 10px 14px; margin-bottom: 6px; border-radius: 8px; background: rgba(30, 40, 65, 0.6); border: 1px solid rgba(255,255,255,0.05); font-size: 0.95rem; color: #9ba3b8; }
 .q-options li.correct { background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.3); color: #6ee7b7; }
-.q-explain { background: rgba(99, 102, 241, 0.08); border-left: 3px solid #6366f1; padding: 16px 20px; border-radius: 0 10px 10px 0; margin-top: 12px; }
-.q-explain p { font-size: 0.92rem; color: #a5b4fc; white-space: pre-line; }
+.q-explain { margin-top: 12px; }
+.q-explain-item { padding: 14px 18px; border-radius: 10px; margin-bottom: 10px; font-size: 0.92rem; line-height: 1.75; }
+.q-explain-item.correct-exp { background: rgba(16, 185, 129, 0.08); border-left: 3px solid #10b981; }
+.q-explain-item.correct-exp .exp-label { color: #6ee7b7; }
+.q-explain-item.wrong-exp { background: rgba(239, 68, 68, 0.06); border-left: 3px solid rgba(239, 68, 68, 0.4); }
+.q-explain-item.wrong-exp .exp-label { color: #fca5a5; }
+.exp-label { font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; display: block; }
+.exp-text { color: #b4bcd0; }
 details { cursor: pointer; }
 details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding: 8px 0; }
 .footer { margin-top: 60px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; color: #6b7280; font-size: 0.9rem; }
@@ -98,10 +104,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: Cross-account IAM roles with trust relationships provide temporary, auditable access without sharing long-term credentials, and can be easily revoked.
-- Why B is wrong: Sharing long-term access keys with an external party creates credentials that are difficult to rotate, audit, and revoke once the project ends.
-- Why C is wrong: Sharing root account credentials is a critical security violation that provides unrestricted access far beyond the required S3 permissions.
-- Why D is wrong: Making S3 buckets public exposes data to the entire internet, not just the vendor, violating data confidentiality.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">Cross-account IAM roles with trust relationships provide temporary, auditable access without sharing long-term credentials, and can be easily revoked.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why B is wrong</span><span class="exp-text">Sharing long-term access keys with an external party creates credentials that are difficult to rotate, audit, and revoke once the project ends.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">Sharing root account credentials is a critical security violation that provides unrestricted access far beyond the required S3 permissions.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">Making S3 buckets public exposes data to the entire internet, not just the vendor, violating data confidentiality.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -115,11 +121,11 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: When security groups are defined in an Auto Scaling launch template (or launch configuration), every instance launched by the group automatically inherits those security groups. This provides consistent, immediate network-level access control without manual steps.
-- Why A is correct: Launch templates natively support security group assignment, ensuring all new instances receive the same firewall rules automatically upon launch.
-- Why B is wrong: NACLs operate at the subnet level and filter traffic by IP address and port, but they cannot reference security groups as sources. Since the ALB's IP addresses can change as it scales, maintaining an accurate NACL rule based on ALB IPs is impractical. Security groups can reference the ALB's security group directly, which is more reliable.
-- Why C is wrong: A lifecycle hook with Lambda adds unnecessary complexity, introduces a window during which new instances are unprotected (between launch and Lambda execution), and creates a potential failure point. Launch templates already handle security group assignment natively at launch time.
-- Why D is wrong: AWS Config rules evaluate compliance after resources are created, meaning there is a gap between instance launch and remediation during which the instance lacks proper firewall rules. This is a reactive approach, whereas launch templates provide proactive, immediate security group assignment.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">When security groups are defined in an Auto Scaling launch template (or launch configuration), every instance launched by the group automatically inherits those security groups. This provides consistent, immediate network-level access control without manual steps.</span></div>
+<div class="q-explain-item correct-exp"><span class="exp-label">✓ Why A is correct</span><span class="exp-text">Launch templates natively support security group assignment, ensuring all new instances receive the same firewall rules automatically upon launch.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why B is wrong</span><span class="exp-text">NACLs operate at the subnet level and filter traffic by IP address and port, but they cannot reference security groups as sources. Since the ALB's IP addresses can change as it scales, maintaining an accurate NACL rule based on ALB IPs is impractical. Security groups can reference the ALB's security group directly, which is more reliable.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">A lifecycle hook with Lambda adds unnecessary complexity, introduces a window during which new instances are unprotected (between launch and Lambda execution), and creates a potential failure point. Launch templates already handle security group assignment natively at launch time.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">AWS Config rules evaluate compliance after resources are created, meaning there is a gap between instance launch and remediation during which the instance lacks proper firewall rules. This is a reactive approach, whereas launch templates provide proactive, immediate security group assignment.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -133,11 +139,11 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: Enabling S3 default encryption with AWS KMS customer-managed keys (CMKs) provides server-side encryption where the company retains full control over the key lifecycle—including rotation, disabling, and access policies. Key usage is logged via AWS CloudTrail for auditing, satisfying compliance requirements for customer-controlled encryption at rest.
-- Why A is wrong: Client-side encryption requires the application to handle encryption before upload. It does not enforce server-side encryption at the S3 storage layer, adds complexity, and cannot guarantee all upload paths (Console, CLI, SDKs) use encryption.
-- Why B is wrong: Storing data unencrypted directly violates the compliance requirement for encryption at rest.
-- Why C is wrong: SSE-S3 uses keys fully managed by AWS. The company has no ability to control rotation, set key policies, or audit individual key usage—failing the requirement for customer-managed keys.
-- Why D is wrong: This is the correct answer.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">Enabling S3 default encryption with AWS KMS customer-managed keys (CMKs) provides server-side encryption where the company retains full control over the key lifecycle—including rotation, disabling, and access policies. Key usage is logged via AWS CloudTrail for auditing, satisfying compliance requirements for customer-controlled encryption at rest.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">Client-side encryption requires the application to handle encryption before upload. It does not enforce server-side encryption at the S3 storage layer, adds complexity, and cannot guarantee all upload paths (Console, CLI, SDKs) use encryption.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why B is wrong</span><span class="exp-text">Storing data unencrypted directly violates the compliance requirement for encryption at rest.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">SSE-S3 uses keys fully managed by AWS. The company has no ability to control rotation, set key policies, or audit individual key usage—failing the requirement for customer-managed keys.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">This is the correct answer.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -153,10 +159,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: Using IAM roles for applications eliminates the need to manage long-lived access keys, reducing credential exposure risk. MFA adds a second authentication factor that protects privileged accounts even if passwords are compromised. Granular least-privilege policies ensure each identity can only perform actions required for its function, limiting the blast radius if credentials are compromised.
-- Why A is wrong: While rotating access keys is a good hygiene practice, it is not one of the top three foundational IAM best practices. The AWS Well-Architected Framework prioritizes eliminating long-lived credentials entirely (via IAM roles) over simply rotating them on a schedule.
-- Why B is wrong: Root account credentials should never be shared. AWS recommends protecting the root user with MFA and using it only for tasks that specifically require root access (such as changing account support plans or closing the account).
-- Why D is wrong: PowerUserAccess grants broad permissions for all AWS services except IAM user and group management. This violates the principle of least privilege because developers should only have permissions required for their specific tasks and projects.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">Using IAM roles for applications eliminates the need to manage long-lived access keys, reducing credential exposure risk. MFA adds a second authentication factor that protects privileged accounts even if passwords are compromised. Granular least-privilege policies ensure each identity can only perform actions required for its function, limiting the blast radius if credentials are compromised.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">While rotating access keys is a good hygiene practice, it is not one of the top three foundational IAM best practices. The AWS Well-Architected Framework prioritizes eliminating long-lived credentials entirely (via IAM roles) over simply rotating them on a schedule.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why B is wrong</span><span class="exp-text">Root account credentials should never be shared. AWS recommends protecting the root user with MFA and using it only for tasks that specifically require root access (such as changing account support plans or closing the account).</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">PowerUserAccess grants broad permissions for all AWS services except IAM user and group management. This violates the principle of least privilege because developers should only have permissions required for their specific tasks and projects.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -170,10 +176,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: AWS Fargate is a serverless compute engine for containers that works with both Amazon ECS and Amazon EKS. It removes the need to provision and manage servers, lets you specify and pay for resources per application, and automatically scales compute capacity based on demand. This is ideal for unpredictable traffic since there is no cluster capacity to manage.
-- Why A is wrong: Amazon ECS with the EC2 launch type requires you to manage and scale the underlying EC2 instances yourself, including patching, capacity planning, and cluster management. This adds significant operational overhead.
-- Why C is wrong: Amazon EKS with self-managed node groups requires managing EC2 instances as worker nodes, including scaling, patching, and OS maintenance. While EKS manages the Kubernetes control plane, the data plane (worker nodes) still requires infrastructure management.
-- Why D is wrong: Running containers directly on EC2 instances with Docker provides no orchestration, no automatic scaling, and requires full infrastructure management including health checks, load distribution, and instance lifecycle management.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">AWS Fargate is a serverless compute engine for containers that works with both Amazon ECS and Amazon EKS. It removes the need to provision and manage servers, lets you specify and pay for resources per application, and automatically scales compute capacity based on demand. This is ideal for unpredictable traffic since there is no cluster capacity to manage.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">Amazon ECS with the EC2 launch type requires you to manage and scale the underlying EC2 instances yourself, including patching, capacity planning, and cluster management. This adds significant operational overhead.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">Amazon EKS with self-managed node groups requires managing EC2 instances as worker nodes, including scaling, patching, and OS maintenance. While EKS manages the Kubernetes control plane, the data plane (worker nodes) still requires infrastructure management.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">Running containers directly on EC2 instances with Docker provides no orchestration, no automatic scaling, and requires full infrastructure management including health checks, load distribution, and instance lifecycle management.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -187,10 +193,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: Amazon RDS Proxy manages a pool of database connections and shares them across Lambda function invocations, preventing connection exhaustion. It sits between the application and the database, requires no application code changes, and automatically multiplexes many application connections over fewer database connections.
-- Why A is wrong: Upgrading the instance class increases compute and memory but does not significantly increase the maximum number of database connections. The root cause is connection management from many concurrent Lambda invocations, not resource capacity on the database.
-- Why B is wrong: RDS Multi-AZ provides a synchronous standby replica for failover, but the standby does not serve traffic or accept connections. It does not help with connection pooling or distributing active connections across instances.
-- Why D is wrong: Migrating to DynamoDB eliminates relational database connection limits, but it requires re-architecting the application data model and Lambda code, which contradicts the requirement of no code changes. DynamoDB is not a drop-in replacement for a relational database.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">Amazon RDS Proxy manages a pool of database connections and shares them across Lambda function invocations, preventing connection exhaustion. It sits between the application and the database, requires no application code changes, and automatically multiplexes many application connections over fewer database connections.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">Upgrading the instance class increases compute and memory but does not significantly increase the maximum number of database connections. The root cause is connection management from many concurrent Lambda invocations, not resource capacity on the database.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why B is wrong</span><span class="exp-text">RDS Multi-AZ provides a synchronous standby replica for failover, but the standby does not serve traffic or accept connections. It does not help with connection pooling or distributing active connections across instances.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">Migrating to DynamoDB eliminates relational database connection limits, but it requires re-architecting the application data model and Lambda code, which contradicts the requirement of no code changes. DynamoDB is not a drop-in replacement for a relational database.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -204,10 +210,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: An SNS topic acts as a fan-out mechanism. When a message is published, SNS delivers a copy to every subscribed SQS queue. Each service consumes from its own dedicated queue independently, enabling different processing rates and independent retry logic without affecting the others.
-- Why Option A is wrong: A single SQS standard queue delivers each message to only one consumer. Multiple services polling the same queue would compete for messages rather than each receiving a copy, so not all three services would process every order.
-- Why Option B is wrong: While Amazon Kinesis Data Streams supports multiple consumers reading the same stream, it requires each consumer to manage shard iterators and checkpointing. Kinesis is optimized for high-throughput ordered streaming rather than simple fan-out to independent services with varying processing rates. It also has higher cost for this use case.
-- Why Option C is wrong: Having the application publish directly to three separate queues creates tight coupling between the publisher and every downstream service. Adding or removing a service requires changing the publisher code, violating loose coupling principles.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">An SNS topic acts as a fan-out mechanism. When a message is published, SNS delivers a copy to every subscribed SQS queue. Each service consumes from its own dedicated queue independently, enabling different processing rates and independent retry logic without affecting the others.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why Option A is wrong</span><span class="exp-text">A single SQS standard queue delivers each message to only one consumer. Multiple services polling the same queue would compete for messages rather than each receiving a copy, so not all three services would process every order.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why Option B is wrong</span><span class="exp-text">While Amazon Kinesis Data Streams supports multiple consumers reading the same stream, it requires each consumer to manage shard iterators and checkpointing. Kinesis is optimized for high-throughput ordered streaming rather than simple fan-out to independent services with varying processing rates. It also has higher cost for this use case.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why Option C is wrong</span><span class="exp-text">Having the application publish directly to three separate queues creates tight coupling between the publisher and every downstream service. Adding or removing a service requires changing the publisher code, violating loose coupling principles.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -222,10 +228,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: S3 Standard-IA (E) provides the same millisecond access as S3 Standard at a lower per-GB storage cost, making it ideal for files accessed only a few times per month. S3 Glacier Flexible Retrieval (B) is the lowest-cost archival tier where 3–5 hour standard retrieval meets the annual audit requirement for files older than one year.
-- Why A is wrong: S3 One Zone-IA stores data in a single Availability Zone, reducing durability. If that AZ is lost, the data is permanently gone. For compliance video files that must be retained, Standard-IA provides the same cost model with full multi-AZ durability (11 nines).
-- Why C is wrong: Keeping all files in S3 Standard regardless of age is the most expensive approach. Files older than 30 days are rarely accessed, so paying the S3 Standard per-GB rate for them wastes budget when Standard-IA costs roughly 45% less per GB.
-- Why D is wrong: S3 Glacier Instant Retrieval provides millisecond access like Standard-IA and costs less per GB stored, but it charges significantly higher per-GB retrieval fees. It is optimized for data accessed roughly once per quarter. For the 30-day to one-year window where files are still accessed a few times per month, Standard-IA is more cost-effective due to lower retrieval costs.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">S3 Standard-IA (E) provides the same millisecond access as S3 Standard at a lower per-GB storage cost, making it ideal for files accessed only a few times per month. S3 Glacier Flexible Retrieval (B) is the lowest-cost archival tier where 3–5 hour standard retrieval meets the annual audit requirement for files older than one year.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">S3 One Zone-IA stores data in a single Availability Zone, reducing durability. If that AZ is lost, the data is permanently gone. For compliance video files that must be retained, Standard-IA provides the same cost model with full multi-AZ durability (11 nines).</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">Keeping all files in S3 Standard regardless of age is the most expensive approach. Files older than 30 days are rarely accessed, so paying the S3 Standard per-GB rate for them wastes budget when Standard-IA costs roughly 45% less per GB.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">S3 Glacier Instant Retrieval provides millisecond access like Standard-IA and costs less per GB stored, but it charges significantly higher per-GB retrieval fees. It is optimized for data accessed roughly once per quarter. For the 30-day to one-year window where files are still accessed a few times per month, Standard-IA is more cost-effective due to lower retrieval costs.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -239,10 +245,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: A cluster placement group places instances on the same high-bisection-bandwidth segment of the network within a single AZ, delivering the lowest inter-instance latency. This is the recommended placement strategy for tightly coupled HPC workloads that require frequent node-to-node communication.
-- Why B is wrong: A spread placement group distributes instances across distinct underlying hardware to reduce correlated failures. It is designed for high availability of small groups of instances, not for low latency. It also limits placement to 7 instances per AZ per group.
-- Why C is wrong: A partition placement group isolates groups of instances onto separate racks to limit blast radius of hardware failures. It is useful for large distributed workloads like HDFS or Cassandra, but does not optimize for the lowest possible inter-instance latency.
-- Why D is wrong: Placing instances across multiple AZs introduces cross-AZ network latency (typically 1–2 ms round-trip), which would not reliably meet the sub-2-ms requirement for tightly coupled communication patterns.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">A cluster placement group places instances on the same high-bisection-bandwidth segment of the network within a single AZ, delivering the lowest inter-instance latency. This is the recommended placement strategy for tightly coupled HPC workloads that require frequent node-to-node communication.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why B is wrong</span><span class="exp-text">A spread placement group distributes instances across distinct underlying hardware to reduce correlated failures. It is designed for high availability of small groups of instances, not for low latency. It also limits placement to 7 instances per AZ per group.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">A partition placement group isolates groups of instances onto separate racks to limit blast radius of hardware failures. It is useful for large distributed workloads like HDFS or Cassandra, but does not optimize for the lowest possible inter-instance latency.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">Placing instances across multiple AZs introduces cross-AZ network latency (typically 1–2 ms round-trip), which would not reliably meet the sub-2-ms requirement for tightly coupled communication patterns.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -257,12 +263,12 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: Aurora Global Database replicates data to secondary clusters in other AWS Regions with typical replication lag under one second. Secondary clusters serve read traffic with local-Region latency, and in a Regional failure the secondary cluster can be promoted to read-write in under one minute.
-- Why A is wrong: Multi-AZ read replicas within us-east-1 provide high availability within a single Region but do nothing to reduce latency for users in Europe and Asia. They also cannot help if the entire us-east-1 Region becomes unavailable.
-- Why B is correct: Aurora Global Database places read-capable secondary clusters in eu-west-1 and ap-northeast-1, reducing read latency to local-Region levels. Its managed cross-Region replication and fast promotion (typically under one minute) satisfy the disaster recovery requirement.
-- Why C is wrong: Cross-Region RDS for MySQL read replicas can reduce read latency in remote Regions, but promoting an RDS read replica to a standalone primary is a manual process that takes several minutes, breaks the replication chain, and requires application endpoint reconfiguration. This does not meet the one-minute failover requirement.
-- Why D is wrong: DynamoDB global tables provide multi-Region active-active replication, but migrating from Aurora MySQL to DynamoDB requires redesigning the data model for NoSQL and rewriting all SQL queries—a disproportionate change for a relational workload.
-- Why E is wrong: Aurora Multi-AZ provides automatic failover within a single Region, not across Regions. Route 53 latency-based routing directs users to the nearest endpoint but does not create database replicas in other Regions or reduce database query latency for remote users.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">Aurora Global Database replicates data to secondary clusters in other AWS Regions with typical replication lag under one second. Secondary clusters serve read traffic with local-Region latency, and in a Regional failure the secondary cluster can be promoted to read-write in under one minute.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">Multi-AZ read replicas within us-east-1 provide high availability within a single Region but do nothing to reduce latency for users in Europe and Asia. They also cannot help if the entire us-east-1 Region becomes unavailable.</span></div>
+<div class="q-explain-item correct-exp"><span class="exp-label">✓ Why B is correct</span><span class="exp-text">Aurora Global Database places read-capable secondary clusters in eu-west-1 and ap-northeast-1, reducing read latency to local-Region levels. Its managed cross-Region replication and fast promotion (typically under one minute) satisfy the disaster recovery requirement.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">Cross-Region RDS for MySQL read replicas can reduce read latency in remote Regions, but promoting an RDS read replica to a standalone primary is a manual process that takes several minutes, breaks the replication chain, and requires application endpoint reconfiguration. This does not meet the one-minute failover requirement.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">DynamoDB global tables provide multi-Region active-active replication, but migrating from Aurora MySQL to DynamoDB requires redesigning the data model for NoSQL and rewriting all SQL queries—a disproportionate change for a relational workload.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why E is wrong</span><span class="exp-text">Aurora Multi-AZ provides automatic failover within a single Region, not across Regions. Route 53 latency-based routing directs users to the nearest endpoint but does not create database replicas in other Regions or reduce database query latency for remote users.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -276,10 +282,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: An Internet Gateway (one per VPC) enables public subnet internet access. Deploying a NAT Gateway in each AZ ensures that private subnet instances retain internet connectivity even if one AZ fails. Separate route tables per subnet tier allow correct traffic routing — public subnets route 0.0.0.0/0 to the IGW, while each private subnet routes 0.0.0.0/0 to its AZ-local NAT Gateway.
-- Why A is wrong: A single NAT Gateway in one AZ is a single point of failure. If that AZ experiences an outage, all private subnet internet access across the VPC is lost, violating the high availability requirement.
-- Why C is wrong: A VPC supports only one Internet Gateway — you cannot attach multiple IGWs to the same VPC. Additionally, a single default route table cannot differentiate routing between public and private subnets, preventing correct traffic flow.
-- Why D is wrong: NAT instances are self-managed EC2 instances that lack the automatic scaling, built-in redundancy, and high availability of managed NAT Gateways. A single shared route table also prevents the necessary routing separation between public and private subnets.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">An Internet Gateway (one per VPC) enables public subnet internet access. Deploying a NAT Gateway in each AZ ensures that private subnet instances retain internet connectivity even if one AZ fails. Separate route tables per subnet tier allow correct traffic routing — public subnets route 0.0.0.0/0 to the IGW, while each private subnet routes 0.0.0.0/0 to its AZ-local NAT Gateway.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">A single NAT Gateway in one AZ is a single point of failure. If that AZ experiences an outage, all private subnet internet access across the VPC is lost, violating the high availability requirement.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">A VPC supports only one Internet Gateway — you cannot attach multiple IGWs to the same VPC. Additionally, a single default route table cannot differentiate routing between public and private subnets, preventing correct traffic flow.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">NAT instances are self-managed EC2 instances that lack the automatic scaling, built-in redundancy, and high availability of managed NAT Gateways. A single shared route table also prevents the necessary routing separation between public and private subnets.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -294,10 +300,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct (A, E): Data velocity determines whether a streaming service (Amazon Kinesis Data Streams) or a batch transfer service (AWS DataSync) is needed. Data volume and throughput determine the capacity, scaling configuration, and service tier required — for example, whether the Snow Family is needed for offline bulk transfer or whether Kinesis shard counts must be scaled up. Together these two factors are the primary drivers of ingestion architecture.
-- Why B is wrong: File encoding (UTF-8 vs. ASCII) is a parsing-level detail handled during transformation, not a factor that drives the choice between streaming and batch ingestion services.
-- Why C is wrong: Source data format (structured, semi-structured, or unstructured) affects the transformation and query layers downstream, but it does not determine the ingestion approach. Both Kinesis and DataSync can ingest any data format; format-specific processing occurs after ingestion.
-- Why D is wrong: The number of downstream consumers affects the analytics and query architecture (for example, choosing Redshift vs. Athena), but it does not influence whether data should be ingested via real-time streaming or scheduled batch transfer.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct (A, E)</span><span class="exp-text">Data velocity determines whether a streaming service (Amazon Kinesis Data Streams) or a batch transfer service (AWS DataSync) is needed. Data volume and throughput determine the capacity, scaling configuration, and service tier required — for example, whether the Snow Family is needed for offline bulk transfer or whether Kinesis shard counts must be scaled up. Together these two factors are the primary drivers of ingestion architecture.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why B is wrong</span><span class="exp-text">File encoding (UTF-8 vs. ASCII) is a parsing-level detail handled during transformation, not a factor that drives the choice between streaming and batch ingestion services.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">Source data format (structured, semi-structured, or unstructured) affects the transformation and query layers downstream, but it does not determine the ingestion approach. Both Kinesis and DataSync can ingest any data format; format-specific processing occurs after ingestion.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">The number of downstream consumers affects the analytics and query architecture (for example, choosing Redshift vs. Athena), but it does not influence whether data should be ingested via real-time streaming or scheduled batch transfer.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -311,10 +317,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: Amazon EFS with Max I/O performance mode is designed for highly parallelized workloads where large numbers of EC2 instances need concurrent shared file access. Max I/O mode scales to higher aggregate throughput and IOPS across many NFS clients, which is ideal for 50 instances processing video files concurrently.
-- Why B is wrong: Amazon EBS Multi-Attach io2 supports sharing a single volume across a maximum of 16 Nitro-based instances within the same Availability Zone. It cannot accommodate 50 instances and requires a cluster-aware file system to coordinate concurrent writes, adding significant complexity.
-- Why C is wrong: Amazon FSx for Windows File Server uses the SMB protocol, which is designed for Windows-based workloads. While Linux instances can access it via a Samba client, it is not optimized for high-throughput parallel Linux processing workloads that require NFS-based shared access.
-- Why D is wrong: Amazon S3 is object storage accessed via REST APIs. It does not provide POSIX file system semantics such as file locking or in-place updates needed for concurrent read/write video processing workflows.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">Amazon EFS with Max I/O performance mode is designed for highly parallelized workloads where large numbers of EC2 instances need concurrent shared file access. Max I/O mode scales to higher aggregate throughput and IOPS across many NFS clients, which is ideal for 50 instances processing video files concurrently.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why B is wrong</span><span class="exp-text">Amazon EBS Multi-Attach io2 supports sharing a single volume across a maximum of 16 Nitro-based instances within the same Availability Zone. It cannot accommodate 50 instances and requires a cluster-aware file system to coordinate concurrent writes, adding significant complexity.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">Amazon FSx for Windows File Server uses the SMB protocol, which is designed for Windows-based workloads. While Linux instances can access it via a Samba client, it is not optimized for high-throughput parallel Linux processing workloads that require NFS-based shared access.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">Amazon S3 is object storage accessed via REST APIs. It does not provide POSIX file system semantics such as file locking or in-place updates needed for concurrent read/write video processing workflows.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -328,10 +334,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why B is correct: gp3 volumes are up to 20% cheaper per GB than gp2 and allow independent configuration of IOPS (up to 16,000) and throughput (up to 1,000 MiB/s) beyond the 3,000 IOPS and 125 MiB/s baseline included at no extra charge. This lets the team right-size performance to actual workload needs while reducing cost.
-- Why A is wrong: st1 (Throughput Optimized HDD) is designed for sequential, throughput-intensive workloads such as big data and log processing. It cannot be used as a boot volume and has much lower IOPS, making it unsuitable for general development workloads that require moderate random I/O.
-- Why C is wrong: io2 (Provisioned IOPS SSD) is the most expensive EBS volume type, designed for latency-sensitive transactional workloads requiring sustained high IOPS. Using io2 for dev/test environments would significantly increase costs with no practical benefit.
-- Why D is wrong: Increasing gp2 volume size raises the baseline IOPS (3 IOPS per GB) but does not address the core cost problem — gp2 is inherently more expensive per GB than gp3, so larger volumes increase the monthly bill even further.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why B is correct</span><span class="exp-text">gp3 volumes are up to 20% cheaper per GB than gp2 and allow independent configuration of IOPS (up to 16,000) and throughput (up to 1,000 MiB/s) beyond the 3,000 IOPS and 125 MiB/s baseline included at no extra charge. This lets the team right-size performance to actual workload needs while reducing cost.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">st1 (Throughput Optimized HDD) is designed for sequential, throughput-intensive workloads such as big data and log processing. It cannot be used as a boot volume and has much lower IOPS, making it unsuitable for general development workloads that require moderate random I/O.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">io2 (Provisioned IOPS SSD) is the most expensive EBS volume type, designed for latency-sensitive transactional workloads requiring sustained high IOPS. Using io2 for dev/test environments would significantly increase costs with no practical benefit.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">Increasing gp2 volume size raises the baseline IOPS (3 IOPS per GB) but does not address the core cost problem — gp2 is inherently more expensive per GB than gp3, so larger volumes increase the monthly bill even further.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -345,10 +351,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: T3 burstable instances are designed for workloads with low average CPU utilization and occasional spikes. They accumulate CPU credits during idle periods and spend them during bursts, providing cost-effective performance for exactly this usage pattern.
-- Why B is wrong: C6i compute-optimized instances are built for sustained high-CPU workloads such as batch processing and HPC. Using them for a workload averaging only 10% CPU means paying for unused compute capacity the vast majority of the time.
-- Why C is wrong: M6i general-purpose instances provide consistent CPU capacity but at a higher hourly cost than T3. With only 10% average utilization, most of that capacity sits idle, wasting money.
-- Why D is wrong: R6i memory-optimized instances are designed for memory-intensive workloads like in-memory databases and real-time analytics. They cost more than general-purpose instances and provide no benefit for a CPU-bursting CMS workload with standard memory requirements.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">T3 burstable instances are designed for workloads with low average CPU utilization and occasional spikes. They accumulate CPU credits during idle periods and spend them during bursts, providing cost-effective performance for exactly this usage pattern.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why B is wrong</span><span class="exp-text">C6i compute-optimized instances are built for sustained high-CPU workloads such as batch processing and HPC. Using them for a workload averaging only 10% CPU means paying for unused compute capacity the vast majority of the time.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">M6i general-purpose instances provide consistent CPU capacity but at a higher hourly cost than T3. With only 10% average utilization, most of that capacity sits idle, wasting money.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">R6i memory-optimized instances are designed for memory-intensive workloads like in-memory databases and real-time analytics. They cost more than general-purpose instances and provide no benefit for a CPU-bursting CMS workload with standard memory requirements.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -362,10 +368,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: The DynamoDB Standard-Infrequent Access (Standard-IA) table class reduces storage costs by up to 60% compared to the Standard table class. It is designed for tables where storage is the dominant cost and data is accessed infrequently. Since order history is written once and read only a few times per month with storage comprising 70% of the cost, Standard-IA is the optimal choice.
-- Why A is wrong: DynamoDB Accelerator (DAX) is an in-memory caching layer that reduces read latency and read capacity consumption. Since the table is already infrequently accessed, DAX would add cost without meaningful benefit and does not reduce storage costs.
-- Why C is wrong: Migrating to Amazon RDS MySQL introduces operational overhead for schema management, patching, and scaling. DynamoDB Standard-IA achieves the storage savings natively without requiring a migration or data model changes.
-- Why D is wrong: Reducing write capacity units addresses write throughput cost, not storage cost. Since storage accounts for 70% of the bill, this approach targets the wrong cost component.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">The DynamoDB Standard-Infrequent Access (Standard-IA) table class reduces storage costs by up to 60% compared to the Standard table class. It is designed for tables where storage is the dominant cost and data is accessed infrequently. Since order history is written once and read only a few times per month with storage comprising 70% of the cost, Standard-IA is the optimal choice.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">DynamoDB Accelerator (DAX) is an in-memory caching layer that reduces read latency and read capacity consumption. Since the table is already infrequently accessed, DAX would add cost without meaningful benefit and does not reduce storage costs.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">Migrating to Amazon RDS MySQL introduces operational overhead for schema management, patching, and scaling. DynamoDB Standard-IA achieves the storage savings natively without requiring a migration or data model changes.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">Reducing write capacity units addresses write throughput cost, not storage cost. Since storage accounts for 70% of the bill, this approach targets the wrong cost component.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -379,10 +385,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct (C): Interface VPC endpoints for CloudWatch Logs charge ~$0.01/hr per AZ plus ~$0.01/GB processed. At 10 TB/month, the endpoint data processing cost is approximately $100 plus roughly $7/AZ/month in hourly charges. Compared to the NAT Gateway's ~$0.045/GB ($450 at 10 TB) plus ~$32/month hourly, the interface endpoint saves over $300/month for this traffic alone. The traffic bypasses the NAT Gateway entirely, routing directly to CloudWatch through the endpoint's elastic network interface within the VPC.
-- Why A is wrong: A NAT instance on t3.micro (~$7.60/month on-demand) is cheaper than NAT Gateway hourly charges, but it has limited network bandwidth (~5 Gbps burst on t3 family) and lacks automatic scaling, high availability, and managed patching. For 10 TB/month of continuous log traffic, a t3.micro may throttle during peaks. More importantly, a NAT instance still processes all outbound traffic through a single point, while an interface endpoint selectively removes only CloudWatch traffic from the NAT path—leaving the NAT Gateway properly sized for remaining traffic.
-- Why B is wrong: Adding a second NAT Gateway distributes load but does not reduce total per-GB processing charges. NAT Gateway charges ~$0.045/GB regardless of how many gateways process the traffic. Two gateways processing 5 TB each still cost $450 total in per-GB charges, plus double the hourly fees (~$64/month instead of ~$32/month), increasing overall costs.
-- Why D is wrong: Moving servers to public subnets eliminates NAT Gateway charges but removes the security isolation of private subnets. The application servers would be directly addressable from the internet, requiring additional security hardening. Interface VPC endpoints achieve the same NAT Gateway cost elimination for CloudWatch traffic while preserving the private subnet security model.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct (C)</span><span class="exp-text">Interface VPC endpoints for CloudWatch Logs charge ~$0.01/hr per AZ plus ~$0.01/GB processed. At 10 TB/month, the endpoint data processing cost is approximately $100 plus roughly $7/AZ/month in hourly charges. Compared to the NAT Gateway's ~$0.045/GB ($450 at 10 TB) plus ~$32/month hourly, the interface endpoint saves over $300/month for this traffic alone. The traffic bypasses the NAT Gateway entirely, routing directly to CloudWatch through the endpoint's elastic network interface within the VPC.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">A NAT instance on t3.micro (~$7.60/month on-demand) is cheaper than NAT Gateway hourly charges, but it has limited network bandwidth (~5 Gbps burst on t3 family) and lacks automatic scaling, high availability, and managed patching. For 10 TB/month of continuous log traffic, a t3.micro may throttle during peaks. More importantly, a NAT instance still processes all outbound traffic through a single point, while an interface endpoint selectively removes only CloudWatch traffic from the NAT path—leaving the NAT Gateway properly sized for remaining traffic.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why B is wrong</span><span class="exp-text">Adding a second NAT Gateway distributes load but does not reduce total per-GB processing charges. NAT Gateway charges ~$0.045/GB regardless of how many gateways process the traffic. Two gateways processing 5 TB each still cost $450 total in per-GB charges, plus double the hourly fees (~$64/month instead of ~$32/month), increasing overall costs.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">Moving servers to public subnets eliminates NAT Gateway charges but removes the security isolation of private subnets. The application servers would be directly addressable from the internet, requiring additional security hardening. Interface VPC endpoints achieve the same NAT Gateway cost elimination for CloudWatch traffic while preserving the private subnet security model.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -398,13 +404,13 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: Before committing to long-term purchasing decisions, the company must first gain cost visibility. Enabling cost allocation tags (B) lets teams categorize spend by project and department. Cost Explorer with rightsizing recommendations (C) identifies waste and underutilized resources. AWS Budgets with alerts (E) provides proactive spending thresholds so teams are notified before budgets are exceeded. Together these three actions establish the governance foundation required before making optimization decisions.
-- Why A is wrong: The Enterprise Discount Program (EDP) requires a committed annual spend and is a long-term financial commitment. Without first understanding where the 40% cost growth is coming from, committing to an EDP risks locking in spending on resources that may be over-provisioned or unnecessary. The company needs cost visibility through tagging, Cost Explorer, and Budgets before negotiating volume discounts.
-- Why B is correct: Cost allocation tags are foundational to cost governance. They enable grouping and filtering costs by project, team, or environment in Cost Explorer and the AWS Cost and Usage Report. Without tags, the company cannot attribute the 40% cost growth to specific services or teams.
-- Why C is correct: AWS Cost Explorer provides historical and forecasted cost views, while its rightsizing recommendations analyze CloudWatch metrics to identify over-provisioned EC2 instances. This addresses the immediate need to understand where money is being spent.
-- Why D is wrong: Purchasing 3-year All Upfront RIs without first analyzing usage patterns risks locking into commitments for resources that may be over-provisioned, underutilized, or candidates for elimination. The company should first understand baseline utilization through Cost Explorer before making long-term purchasing commitments.
-- Why E is correct: AWS Budgets enables setting custom cost thresholds with automated alerts via SNS or email. This gives each team proactive warnings before overspending, which directly addresses the governance gap that allowed 40% uncontrolled cost growth.
-- Why F is wrong: Consolidating multiple AWS accounts into one eliminates the organizational and security benefits of multi-account architecture, such as blast radius isolation and independent IAM boundaries. Cross-account data transfer within the same Region via VPC peering or AWS PrivateLink is already low-cost ($0.01/GB same-AZ, $0.02/GB cross-AZ). The 40% cost growth is far more likely caused by over-provisioned compute, storage, or untagged resources than by cross-account transfer fees.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">Before committing to long-term purchasing decisions, the company must first gain cost visibility. Enabling cost allocation tags (B) lets teams categorize spend by project and department. Cost Explorer with rightsizing recommendations (C) identifies waste and underutilized resources. AWS Budgets with alerts (E) provides proactive spending thresholds so teams are notified before budgets are exceeded. Together these three actions establish the governance foundation required before making optimization decisions.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">The Enterprise Discount Program (EDP) requires a committed annual spend and is a long-term financial commitment. Without first understanding where the 40% cost growth is coming from, committing to an EDP risks locking in spending on resources that may be over-provisioned or unnecessary. The company needs cost visibility through tagging, Cost Explorer, and Budgets before negotiating volume discounts.</span></div>
+<div class="q-explain-item correct-exp"><span class="exp-label">✓ Why B is correct</span><span class="exp-text">Cost allocation tags are foundational to cost governance. They enable grouping and filtering costs by project, team, or environment in Cost Explorer and the AWS Cost and Usage Report. Without tags, the company cannot attribute the 40% cost growth to specific services or teams.</span></div>
+<div class="q-explain-item correct-exp"><span class="exp-label">✓ Why C is correct</span><span class="exp-text">AWS Cost Explorer provides historical and forecasted cost views, while its rightsizing recommendations analyze CloudWatch metrics to identify over-provisioned EC2 instances. This addresses the immediate need to understand where money is being spent.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">Purchasing 3-year All Upfront RIs without first analyzing usage patterns risks locking into commitments for resources that may be over-provisioned, underutilized, or candidates for elimination. The company should first understand baseline utilization through Cost Explorer before making long-term purchasing commitments.</span></div>
+<div class="q-explain-item correct-exp"><span class="exp-label">✓ Why E is correct</span><span class="exp-text">AWS Budgets enables setting custom cost thresholds with automated alerts via SNS or email. This gives each team proactive warnings before overspending, which directly addresses the governance gap that allowed 40% uncontrolled cost growth.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why F is wrong</span><span class="exp-text">Consolidating multiple AWS accounts into one eliminates the organizational and security benefits of multi-account architecture, such as blast radius isolation and independent IAM boundaries. Cross-account data transfer within the same Region via VPC peering or AWS PrivateLink is already low-cost ($0.01/GB same-AZ, $0.02/GB cross-AZ). The 40% cost growth is far more likely caused by over-provisioned compute, storage, or untagged resources than by cross-account transfer fees.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -418,10 +424,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct (B): Athena charges based on the amount of data scanned per query. Converting JSON to Apache Parquet (a columnar format) reduces data scanned by 30–90% because Athena reads only the columns needed for each query rather than entire rows. Partitioning by date and Region organizes data into separate S3 prefixes, allowing Athena to use partition pruning to skip irrelevant data entirely. Together, these optimizations dramatically reduce both query execution time and per-query cost.
-- Why A is wrong: S3 Transfer Acceleration improves upload speed to S3 from geographically distant locations. It does not affect how Athena reads data from S3 within the same Region, and Athena already reads S3 data at high throughput natively.
-- Why C is wrong: Creating multiple Athena workgroups helps with query management, concurrency limits, and per-team cost tracking, but it does not reduce the amount of data scanned per individual query. Each query still performs a full scan of the underlying data.
-- Why D is wrong: S3 Intelligent-Tiering optimizes storage costs by automatically moving objects between access tiers based on access frequency. It does not reduce the volume of data Athena scans or improve query performance.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct (B)</span><span class="exp-text">Athena charges based on the amount of data scanned per query. Converting JSON to Apache Parquet (a columnar format) reduces data scanned by 30–90% because Athena reads only the columns needed for each query rather than entire rows. Partitioning by date and Region organizes data into separate S3 prefixes, allowing Athena to use partition pruning to skip irrelevant data entirely. Together, these optimizations dramatically reduce both query execution time and per-query cost.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">S3 Transfer Acceleration improves upload speed to S3 from geographically distant locations. It does not affect how Athena reads data from S3 within the same Region, and Athena already reads S3 data at high throughput natively.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">Creating multiple Athena workgroups helps with query management, concurrency limits, and per-team cost tracking, but it does not reduce the amount of data scanned per individual query. Each query still performs a full scan of the underlying data.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">S3 Intelligent-Tiering optimizes storage costs by automatically moving objects between access tiers based on access frequency. It does not reduce the volume of data Athena scans or improve query performance.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -435,10 +441,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: SQS FIFO queues guarantee strict message ordering within a message group. By using the customer ID as the message group ID, all transactions for a given customer are processed in exactly the order they were sent, which prevents out-of-order payment processing. FIFO queues also provide exactly-once processing, eliminating duplicate charges.
-- Why A is wrong: Long polling reduces empty API responses and lowers cost, but it does not change message ordering. Standard queues use best-effort ordering regardless of the number of consumers or polling configuration.
-- Why C is wrong: Visibility timeout controls how long a message is hidden from other consumers after being received. It prevents duplicate processing but has no effect on the order in which messages are delivered to consumers.
-- Why D is wrong: Client-side reordering adds application complexity and is unreliable because it requires buffering messages and waiting for out-of-order arrivals. SQS FIFO queues provide ordering natively without custom logic.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">SQS FIFO queues guarantee strict message ordering within a message group. By using the customer ID as the message group ID, all transactions for a given customer are processed in exactly the order they were sent, which prevents out-of-order payment processing. FIFO queues also provide exactly-once processing, eliminating duplicate charges.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">Long polling reduces empty API responses and lowers cost, but it does not change message ordering. Standard queues use best-effort ordering regardless of the number of consumers or polling configuration.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">Visibility timeout controls how long a message is hidden from other consumers after being received. It prevents duplicate processing but has no effect on the order in which messages are delivered to consumers.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">Client-side reordering adds application complexity and is unreliable because it requires buffering messages and waiting for out-of-order arrivals. SQS FIFO queues provide ordering natively without custom logic.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -452,10 +458,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct (B): Predictive scaling uses ML to analyze up to 14 days of historical data, identify recurring patterns, and proactively schedule capacity changes before traffic arrives. It adapts automatically as patterns shift, eliminating the need for manual schedule updates. This directly addresses both problems: the lag from reactive-only scaling and the operational burden of maintaining scheduled actions.
-- Why A is wrong: Step scaling still reacts after CloudWatch metric thresholds are breached. Even with more aggressive thresholds, there is an inherent delay between demand arriving, the metric rising, the alarm triggering, and new instances launching and passing health checks. This does not solve the pre-provisioning requirement.
-- Why C is wrong: Setting minimum capacity to peak load means the company pays for peak resources 24/7, including overnight and off-season periods when traffic is a fraction of peak. This is wasteful and does not represent an elastic architecture.
-- Why D is wrong: This is the current approach. Regardless of update frequency, manually maintained schedules cannot adapt to shifting patterns in real time and still require ongoing operational effort.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct (B)</span><span class="exp-text">Predictive scaling uses ML to analyze up to 14 days of historical data, identify recurring patterns, and proactively schedule capacity changes before traffic arrives. It adapts automatically as patterns shift, eliminating the need for manual schedule updates. This directly addresses both problems: the lag from reactive-only scaling and the operational burden of maintaining scheduled actions.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">Step scaling still reacts after CloudWatch metric thresholds are breached. Even with more aggressive thresholds, there is an inherent delay between demand arriving, the metric rising, the alarm triggering, and new instances launching and passing health checks. This does not solve the pre-provisioning requirement.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">Setting minimum capacity to peak load means the company pays for peak resources 24/7, including overnight and off-season periods when traffic is a fraction of peak. This is wasteful and does not represent an elastic architecture.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">This is the current approach. Regardless of update frequency, manually maintained schedules cannot adapt to shifting patterns in real time and still require ongoing operational effort.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -469,10 +475,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct (C): Amazon EKS runs upstream Kubernetes, so it is fully compatible with standard Kubernetes tooling including Helm for package management, kubectl for cluster operations, and any other tools that interact with the Kubernetes API. Using EKS gives the team a managed control plane while preserving their existing workflows.
-- Why A is wrong: Rewriting Helm charts as CloudFormation templates requires significant effort and loses the team's existing Kubernetes expertise. ECS uses a different orchestration model (task definitions, not Kubernetes manifests), so this does not meet the 'least operational overhead' requirement.
-- Why B is wrong: Self-managing Kubernetes on EC2 with kubeadm supports the existing tools but adds significant operational overhead for control plane management, etcd backups, Kubernetes upgrades, and high-availability configuration—exactly the overhead EKS eliminates.
-- Why D is wrong: AWS Lambda with container images supports Docker containers but does not run Kubernetes. Helm charts, kubectl, and Kubernetes APIs are not applicable to Lambda, so the team would need to completely redesign their deployment process.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct (C)</span><span class="exp-text">Amazon EKS runs upstream Kubernetes, so it is fully compatible with standard Kubernetes tooling including Helm for package management, kubectl for cluster operations, and any other tools that interact with the Kubernetes API. Using EKS gives the team a managed control plane while preserving their existing workflows.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">Rewriting Helm charts as CloudFormation templates requires significant effort and loses the team's existing Kubernetes expertise. ECS uses a different orchestration model (task definitions, not Kubernetes manifests), so this does not meet the 'least operational overhead' requirement.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why B is wrong</span><span class="exp-text">Self-managing Kubernetes on EC2 with kubeadm supports the existing tools but adds significant operational overhead for control plane management, etcd backups, Kubernetes upgrades, and high-availability configuration—exactly the overhead EKS eliminates.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">AWS Lambda with container images supports Docker containers but does not run Kubernetes. Helm charts, kubectl, and Kubernetes APIs are not applicable to Lambda, so the team would need to completely redesign their deployment process.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -486,10 +492,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct (C): Amazon DynamoDB is purpose-built for key-value and document workloads that require consistent single-digit millisecond latency at any scale. On-demand capacity mode automatically accommodates unpredictable traffic spikes without capacity planning, making it ideal for a gaming workload with millions of concurrent users and variable traffic patterns.
-- Why A is wrong: RDS PostgreSQL is a relational database designed for complex queries, joins, and transactions. Simple key-value lookups (user ID → session state) do not benefit from relational features, and RDS cannot match DynamoDB's throughput scaling for millions of concurrent key-value reads/writes.
-- Why B is wrong: Amazon Redshift is an OLAP data warehouse designed for complex analytical queries over large datasets, not for low-latency transactional key-value lookups. Redshift query latency is typically seconds, not single-digit milliseconds.
-- Why D is wrong: While Aurora MySQL offers high throughput for relational workloads, it is over-engineered for simple key-value access patterns. Aurora read replicas max out at 15, whereas DynamoDB can scale horizontally to handle millions of requests per second without manual replica management.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct (C)</span><span class="exp-text">Amazon DynamoDB is purpose-built for key-value and document workloads that require consistent single-digit millisecond latency at any scale. On-demand capacity mode automatically accommodates unpredictable traffic spikes without capacity planning, making it ideal for a gaming workload with millions of concurrent users and variable traffic patterns.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">RDS PostgreSQL is a relational database designed for complex queries, joins, and transactions. Simple key-value lookups (user ID → session state) do not benefit from relational features, and RDS cannot match DynamoDB's throughput scaling for millions of concurrent key-value reads/writes.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why B is wrong</span><span class="exp-text">Amazon Redshift is an OLAP data warehouse designed for complex analytical queries over large datasets, not for low-latency transactional key-value lookups. Redshift query latency is typically seconds, not single-digit milliseconds.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">While Aurora MySQL offers high throughput for relational workloads, it is over-engineered for simple key-value access patterns. Aurora read replicas max out at 15, whereas DynamoDB can scale horizontally to handle millions of requests per second without manual replica management.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -505,14 +511,13 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>A fleet of 500 EC2 instances requires three distinct operational capabilities: automated OS patching, remote script execution, and secure shell access without opening inbound ports.
-
-- Why B (Patch Manager) is correct: Patch Manager automates OS and application patching across fleets with customizable patch baselines, scheduled maintenance windows, and compliance reporting — directly addressing the patching requirement.
-- Why D (Run Command) is correct: Run Command executes shell scripts and commands on targeted instances simultaneously without SSH, with centralized output logging — directly addressing the remote script execution requirement.
-- Why E (Session Manager) is correct: Session Manager provides browser-based or CLI shell access through the SSM agent, requiring no inbound security group rules and no SSH key management — directly addressing the secure access requirement.
-- Why A (AWS Config rules) is wrong: Config evaluates resource configurations for compliance but does not manage, patch, or provide access to instances.
-- Why C (CloudWatch Alarms) is wrong: CloudWatch Alarms trigger notifications based on metric thresholds but do not provide instance management, patching, or remote access capabilities.
-- Why F (AWS CloudTrail) is wrong: CloudTrail records API calls for auditing purposes but does not provide any instance management or access capabilities.</p></div>
+<div class="q-explain"><div class="q-explain-item wrong-exp"><span class="exp-label">✗ Explanation</span><span class="exp-text">A fleet of 500 EC2 instances requires three distinct operational capabilities: automated OS patching, remote script execution, and secure shell access without opening inbound ports.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why B (Patch Manager) is correct</span><span class="exp-text">Patch Manager automates OS and application patching across fleets with customizable patch baselines, scheduled maintenance windows, and compliance reporting — directly addressing the patching requirement.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D (Run Command) is correct</span><span class="exp-text">Run Command executes shell scripts and commands on targeted instances simultaneously without SSH, with centralized output logging — directly addressing the remote script execution requirement.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why E (Session Manager) is correct</span><span class="exp-text">Session Manager provides browser-based or CLI shell access through the SSM agent, requiring no inbound security group rules and no SSH key management — directly addressing the secure access requirement.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A (AWS Config rules) is wrong</span><span class="exp-text">Config evaluates resource configurations for compliance but does not manage, patch, or provide access to instances.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C (CloudWatch Alarms) is wrong</span><span class="exp-text">CloudWatch Alarms trigger notifications based on metric thresholds but do not provide instance management, patching, or remote access capabilities.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why F (AWS CloudTrail) is wrong</span><span class="exp-text">CloudTrail records API calls for auditing purposes but does not provide any instance management or access capabilities.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -526,10 +531,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: AWS Secrets Manager has built-in integration with Amazon RDS for automatic credential rotation. It provides a managed Lambda rotation function that handles generating new credentials, updating the database, and updating the secret — no custom rotation logic required. Applications retrieve credentials via the Secrets Manager API, so rotation is transparent.
-- Why A is wrong: Parameter Store SecureString can store secrets securely, but it has no built-in rotation mechanism for RDS. You would need to write and maintain a custom Lambda function to handle the full rotation workflow, which adds operational overhead.
-- Why B is wrong: S3 is not designed for secret management. Lifecycle policies manage object storage transitions and expiration, not credential rotation. This approach would require extensive custom logic and lacks the access control granularity that Secrets Manager provides.
-- Why D is wrong: Environment variables on EC2 instances are not centrally managed — each instance must be updated individually during rotation. AWS Config rules evaluate compliance but cannot perform the actual rotation. This approach doesn't scale and doesn't automate the rotation itself.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">AWS Secrets Manager has built-in integration with Amazon RDS for automatic credential rotation. It provides a managed Lambda rotation function that handles generating new credentials, updating the database, and updating the secret — no custom rotation logic required. Applications retrieve credentials via the Secrets Manager API, so rotation is transparent.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">Parameter Store SecureString can store secrets securely, but it has no built-in rotation mechanism for RDS. You would need to write and maintain a custom Lambda function to handle the full rotation workflow, which adds operational overhead.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why B is wrong</span><span class="exp-text">S3 is not designed for secret management. Lifecycle policies manage object storage transitions and expiration, not credential rotation. This approach would require extensive custom logic and lacks the access control granularity that Secrets Manager provides.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">Environment variables on EC2 instances are not centrally managed — each instance must be updated individually during rotation. AWS Config rules evaluate compliance but cannot perform the actual rotation. This approach doesn't scale and doesn't automate the rotation itself.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -543,12 +548,11 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>AWS Transfer Family provides fully managed SFTP, FTPS, and FTP servers that store files directly in Amazon S3 or Amazon EFS. Partners continue using their existing SFTP clients with no changes, while the company benefits from S3 durability and scalability without managing any server infrastructure.
-
-- Why A is wrong: An EC2-based SFTP server requires patching, scaling, and HA configuration — significantly more operational overhead than a managed service.
-- Why B is wrong: S3 pre-signed URLs require partners to change from SFTP to HTTPS-based uploads, violating the constraint that partners cannot modify their client configurations.
-- Why C is correct: Transfer Family provides managed SFTP endpoints backed by S3 with no server management, and partners keep their existing SFTP workflows unchanged.
-- Why D is wrong: AWS DataSync is designed for automated data transfer between storage systems (on-premises NFS/SMB to S3), not for receiving files from external partners via SFTP protocol.</p></div>
+<div class="q-explain"><div class="q-explain-item wrong-exp"><span class="exp-label">✗ Explanation</span><span class="exp-text">AWS Transfer Family provides fully managed SFTP, FTPS, and FTP servers that store files directly in Amazon S3 or Amazon EFS. Partners continue using their existing SFTP clients with no changes, while the company benefits from S3 durability and scalability without managing any server infrastructure.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">An EC2-based SFTP server requires patching, scaling, and HA configuration — significantly more operational overhead than a managed service.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why B is wrong</span><span class="exp-text">S3 pre-signed URLs require partners to change from SFTP to HTTPS-based uploads, violating the constraint that partners cannot modify their client configurations.</span></div>
+<div class="q-explain-item correct-exp"><span class="exp-label">✓ Why C is correct</span><span class="exp-text">Transfer Family provides managed SFTP endpoints backed by S3 with no server management, and partners keep their existing SFTP workflows unchanged.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">AWS DataSync is designed for automated data transfer between storage systems (on-premises NFS/SMB to S3), not for receiving files from external partners via SFTP protocol.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -562,10 +566,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct (B): Amazon CloudFront caches content at 400+ edge locations globally, so users in Asia-Pacific retrieve thumbnails and JS bundles from a nearby edge location instead of making cross-ocean requests to us-east-1. This dramatically reduces latency without any bucket replication or migration.
-- Why A is wrong: S3 Transfer Acceleration speeds up uploads to S3 using edge locations as intermediaries, but it does not cache content for repeated downloads to end users. It is designed for accelerating data transfers into S3, not serving static content.
-- Why C is wrong: Moving the bucket to Asia-Pacific would improve latency for those users but worsen it for users in other regions. The requirement specifies &quot;global users,&quot; so a single-region solution does not satisfy the need.
-- Why D is wrong: The requirement explicitly states &quot;without replicating the bucket to other Regions.&quot; Cross-Region replication copies objects to another bucket but does not serve content from edge locations — users would still need to be routed to the replica, adding routing complexity.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct (B)</span><span class="exp-text">Amazon CloudFront caches content at 400+ edge locations globally, so users in Asia-Pacific retrieve thumbnails and JS bundles from a nearby edge location instead of making cross-ocean requests to us-east-1. This dramatically reduces latency without any bucket replication or migration.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">S3 Transfer Acceleration speeds up uploads to S3 using edge locations as intermediaries, but it does not cache content for repeated downloads to end users. It is designed for accelerating data transfers into S3, not serving static content.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">Moving the bucket to Asia-Pacific would improve latency for those users but worsen it for users in other regions. The requirement specifies &quot;global users,&quot; so a single-region solution does not satisfy the need.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">The requirement explicitly states &quot;without replicating the bucket to other Regions.&quot; Cross-Region replication copies objects to another bucket but does not serve content from edge locations — users would still need to be routed to the replica, adding routing complexity.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -579,11 +583,10 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>Amazon Rekognition content moderation provides pre-trained ML models that detect inappropriate, unwanted, or offensive content in images and videos via a simple API call. It returns confidence scores and hierarchical labels (e.g., explicit nudity, violence, suggestive) that the application can use to enforce content policies automatically.
-
-- Why A is wrong: Deploying and maintaining an open-source image classification model on EC2 requires ML expertise, ongoing model tuning, infrastructure management, and scaling — significant operational overhead when a fully managed, pre-trained alternative exists.
-- Why C is wrong: Amazon Comprehend is a natural language processing (NLP) service that analyzes text. It cannot analyze image or video content. Image metadata (file size, format) contains no information about visual content appropriateness.
-- Why D is wrong: Training a custom moderation model on SageMaker requires labeled training data, ML expertise, and ongoing retraining. Amazon Rekognition already provides pre-trained content moderation that covers standard use cases without any model training.</p></div>
+<div class="q-explain"><div class="q-explain-item wrong-exp"><span class="exp-label">✗ Explanation</span><span class="exp-text">Amazon Rekognition content moderation provides pre-trained ML models that detect inappropriate, unwanted, or offensive content in images and videos via a simple API call. It returns confidence scores and hierarchical labels (e.g., explicit nudity, violence, suggestive) that the application can use to enforce content policies automatically.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why A is wrong</span><span class="exp-text">Deploying and maintaining an open-source image classification model on EC2 requires ML expertise, ongoing model tuning, infrastructure management, and scaling — significant operational overhead when a fully managed, pre-trained alternative exists.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">Amazon Comprehend is a natural language processing (NLP) service that analyzes text. It cannot analyze image or video content. Image metadata (file size, format) contains no information about visual content appropriateness.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">Training a custom moderation model on SageMaker requires labeled training data, ML expertise, and ongoing retraining. Amazon Rekognition already provides pre-trained content moderation that covers standard use cases without any model training.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -597,13 +600,13 @@ details summary { color: #60a5fa; font-weight: 600; font-size: 0.95rem; padding:
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>The company needs both resilience (multi-AZ, fault tolerance) and the ability to handle variable traffic. Option A is correct because SQS decouples the order-processing pipeline so that a failure in one component does not cascade to others, while the Auto Scaling group behind the ALB distributes traffic across multiple AZs and scales horizontally to handle traffic spikes. This combines loose coupling for fault isolation with availability across AZs.
+<div class="q-explain"><div class="q-explain-item wrong-exp"><span class="exp-label">✗ Explanation</span><span class="exp-text">The company needs both resilience (multi-AZ, fault tolerance) and the ability to handle variable traffic. Option A is correct because SQS decouples the order-processing pipeline so that a failure in one component does not cascade to others, while the Auto Scaling group behind the ALB distributes traffic across multiple AZs and scales horizontally to handle traffic spikes. This combines loose coupling for fault isolation with availability across AZs.
 
 Why B is wrong: A single instance in one AZ is a single point of failure. Vertical scaling requires downtime and has upper limits — it does not address resilience.
 
 Why C is wrong: Lambda with API Gateway is a valid serverless pattern, but storing session state in ElastiCache does not address the decoupling requirement for the order-processing pipeline. The question specifically mentions services that process orders sequentially, which requires a queue-based decoupling pattern, not just compute elasticity.
 
-Why D is wrong: While deploying across multiple AZs improves availability, sticky sessions tie users to specific instances. If that instance fails, the user's session is lost. Sticky sessions also create uneven load distribution and reduce the effectiveness of Auto Scaling, which conflicts with both resilience and horizontal scaling goals.</p></div>
+Why D is wrong: While deploying across multiple AZs improves availability, sticky sessions tie users to specific instances. If that instance fails, the user's session is lost. Sticky sessions also create uneven load distribution and reduce the effectiveness of Auto Scaling, which conflicts with both resilience and horizontal scaling goals.</span></div></div>
 </details>
 </div>
 <div class="q-card">
@@ -617,10 +620,10 @@ Why D is wrong: While deploying across multiple AZs improves availability, stick
 </ul>
 <details>
 <summary>Show Explanation</summary>
-<div class="q-explain"><p>- Why correct: On-demand capacity mode scales to match unpredictable spikes without pre-provisioning, so the company pays only for consumed reads during quiet periods. DAX provides microsecond-latency caching for the hot 5 percent of items, offloading repeated reads from the table and further reducing consumed capacity costs.
-- Why B is wrong: Provisioned capacity with Auto Scaling set to 200,000 RCU would keep high provisioned throughput even during low-traffic periods, dramatically increasing cost. Auto Scaling also takes minutes to react, which may not be fast enough for sudden flash-sale spikes.
-- Why C is wrong: Migrating to Aurora would require a significant application rewrite to move from a key-value access pattern to a relational model, and Aurora does not provide the same single-digit-millisecond latency at this read volume without additional caching infrastructure.
-- Why D is wrong: Fixed 200,000 RCU allocation means paying for peak capacity 24/7 regardless of actual traffic. Global tables replicate data across regions for multi-region access, but they do not improve read throughput within a single region.</p></div>
+<div class="q-explain"><div class="q-explain-item correct-exp"><span class="exp-label">✓ Why correct</span><span class="exp-text">On-demand capacity mode scales to match unpredictable spikes without pre-provisioning, so the company pays only for consumed reads during quiet periods. DAX provides microsecond-latency caching for the hot 5 percent of items, offloading repeated reads from the table and further reducing consumed capacity costs.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why B is wrong</span><span class="exp-text">Provisioned capacity with Auto Scaling set to 200,000 RCU would keep high provisioned throughput even during low-traffic periods, dramatically increasing cost. Auto Scaling also takes minutes to react, which may not be fast enough for sudden flash-sale spikes.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why C is wrong</span><span class="exp-text">Migrating to Aurora would require a significant application rewrite to move from a key-value access pattern to a relational model, and Aurora does not provide the same single-digit-millisecond latency at this read volume without additional caching infrastructure.</span></div>
+<div class="q-explain-item wrong-exp"><span class="exp-label">✗ Why D is wrong</span><span class="exp-text">Fixed 200,000 RCU allocation means paying for peak capacity 24/7 regardless of actual traffic. Global tables replicate data across regions for multi-region access, but they do not improve read throughput within a single region.</span></div></div>
 </details>
 </div>
 
